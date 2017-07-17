@@ -1,5 +1,5 @@
 // SecularDemo.aidl
-package com.wisdomcybertech.iit.app;
+package com.daydayup.app;
 
 // Declare any non-default types here with import statements
 

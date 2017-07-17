@@ -1,4 +1,4 @@
-package com.wisdomcybertech.iit.app;
+package com.daydayup.app;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -15,8 +15,8 @@ import android.widget.Toast;
  * @date 2017/7/17.
  */
 
-public class LocalService extends Service {
-    private MyConnBinder binder;
+public class RemoteService extends Service {
+    private MyBinder binder;
     private ServiceConnection conn;
 
     @Nullable
@@ -29,7 +29,7 @@ public class LocalService extends Service {
     public void onCreate() {
         super.onCreate();
         if (binder == null) {
-            binder = new MyConnBinder();
+            binder = new MyBinder();
         }
         if (conn == null) {
             conn = new MyConn();
@@ -39,10 +39,10 @@ public class LocalService extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
-        this.bindService(new Intent(LocalService.this, RemoteService.class), conn, BIND_IMPORTANT);
+        this.bindService(new Intent(RemoteService.this, LocalService.class), conn, BIND_IMPORTANT);
     }
 
-    private class MyConnBinder extends SecularDemo.Stub {
+    private class MyBinder extends SecularDemo.Stub {
 
         @Override
         public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
@@ -51,7 +51,7 @@ public class LocalService extends Service {
 
         @Override
         public String getServiceName() throws RemoteException {
-            return "localservice";
+            return "remoteService";
         }
     }
 
@@ -59,14 +59,14 @@ public class LocalService extends Service {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.e("tag", "LocalService绑定成功");
+            Log.e("tag", "RemoteService绑定成功");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Toast.makeText(LocalService.this, "RemoteService被杀死", Toast.LENGTH_SHORT).show();
-            startService(new Intent(LocalService.this, RemoteService.class));
-            bindService(new Intent(LocalService.this, RemoteService.class), conn, BIND_IMPORTANT);
+            Toast.makeText(RemoteService.this, "LocalService被杀死", Toast.LENGTH_SHORT).show();
+            startService(new Intent(RemoteService.this, LocalService.class));
+            bindService(new Intent(RemoteService.this, LocalService.class), conn, BIND_IMPORTANT);
         }
     }
 }

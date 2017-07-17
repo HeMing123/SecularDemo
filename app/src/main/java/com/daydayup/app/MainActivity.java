@@ -1,4 +1,4 @@
-package com.wisdomcybertech.iit.app;
+package com.daydayup.app;
 
 import android.content.Intent;
 import android.os.Bundle;
